@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>노래 부르기 컨텐츠</title>
+<style>
+#songList {
+    display: flex;
+    flex-direction: column;
+}
+#songList button {
+    margin-bottom: 5px;
+    padding: 5px 10px;
+    font-size: 14px;
+}
+</style>
+<script>
+var songs = [
+    { name: 'deep in abyss', file: 'deepinabyss.mp3' },
+    { name: 'more one night', file: 'MoreOneNight.mp3' },
+    { name: '우마뾰이전설', file: 'うまぴょい伝説.mp3' },
+    { name: '나의 마음을 담아', file: '나의마음을담아.mp3' },
+    { name: '날개를 주세요', file: '날개를주세요.mp3' },
+    { name: '사랑은 혼돈의 노예', file: '사랑은혼돈의노예.mp3' },
+    { name: '吹雪', file: '吹雪.mp3' },
+    { name: '카누를 타고 파라다이스에 갈 때', file: '카누를타고파라다이스에갈때.mp3' },
+    { name: '카모밀레', file: '카모밀레.mp3' },
+    { name: '홀로그램', file: '홀로그램.mp3' }
+]; // 노래 파일 경로 배열
+var currentSongIndex = 0; // 현재 재생 중인 노래 인덱스
+var audio = new Audio(); // Audio 객체 생성
+
+// 노래 리스트 표시 함수
+function displaySongList() {
+    var listContainer = document.getElementById('songList');
+    listContainer.innerHTML = ''; // 이전 목록 삭제
+
+    // 각 노래마다 버튼을 생성하여 리스트에 추가
+    songs.forEach(function(song, index) {
+        var button = document.createElement('button');
+        button.textContent = song.name;
+        button.onclick = function() {
+            currentSongIndex = index; // 해당 노래 인덱스 설정
+            playSong(); // 선택한 노래부터 재생
+        };
+        listContainer.appendChild(button);
+    });
+}
+
+// 선택한 노래부터 재생하는 함수
+function playSong() {
+    audio.src = songs[currentSongIndex].file; // 선택한 노래로 설정
+    audio.play(); // 노래 재생
+
+    // 노래가 끝나면 다음 노래 재생
+    audio.addEventListener('ended', function() {
+        currentSongIndex++; // 다음 노래로 인덱스 증가
+        if (currentSongIndex >= songs.length) {
+            currentSongIndex = 0; // 마지막 노래까지 재생한 경우 첫 번째 노래로 돌아감
+        }
+        audio.src = songs[currentSongIndex].file; // 다음 노래 파일로 설정
+        audio.play(); // 노래 재생
+    });
+}
+
+// 페이지 로드 시 노래 리스트 표시
+window.onload = displaySongList;
+</script>
+</head>
+<body>
+
+<!-- 노래 리스트를 표시할 컨테이너 -->
+<div id="songList"></div>
+
+</body>
+</html>
